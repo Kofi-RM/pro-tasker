@@ -18,7 +18,7 @@ if (process.env.NODE_ENV === 'production') {
 }
  
 app.use("/api/users", userRoutes);
- app.use('/api/tasks', taskRoutes);
+ 
  app.use("/api/projects", projectRoutes)
 db.once('open', () => {
   app.listen(PORT, () => console.log(`🌍 Now listening on localhost:${PORT}`));
