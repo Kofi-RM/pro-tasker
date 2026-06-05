@@ -7,6 +7,7 @@ import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/useAuth";
 function Login() {
+  
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);

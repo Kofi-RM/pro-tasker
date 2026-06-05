@@ -4,6 +4,8 @@ const  User  = require('../models/User');
 const { signToken } = require('../util/auth');
 const passport = require("../util/passport")
 
+require('dotenv').config();
+
 // GET /api/users - return all users (mainly for development / debugging).
 router.get("/", async (req,res) => {
   try {
@@ -83,7 +85,7 @@ router.get(
     const token = signToken(req.user);
     // Redirect the user to the frontend with the token, or send it in the response
      res.redirect(
-      `http://localhost:5173/oauth-success?token=${token}`
+      `${process.env.FRONTEND_DEPLOYMENT}/oauth-success?token=${token}`
     );
   }
 );
