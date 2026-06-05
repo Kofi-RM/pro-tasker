@@ -1,16 +1,17 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../auth/useAuth";
 function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [showPassword, setShowPassword] = useState(false);
-
+const {token, login} = useAuth()
   const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -28,8 +29,7 @@ function Login() {
       );
 
       // save token
-      localStorage.setItem("token", data.token);
-
+      login(data.token)
       // redirect
       navigate("/dashboard");
     } catch (err:unknown) {
@@ -41,6 +41,9 @@ function Login() {
     }
   };
 
+ useEffect(() => {
+  if (token) navigate("/dashboard");
+}, [token, navigate]);
   return (
   <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
 <div className="absolute inset-0 overflow-hidden pointer-events-none">
