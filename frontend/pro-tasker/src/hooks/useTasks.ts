@@ -70,36 +70,36 @@ export function useTasks(projectId?: string, token?: string) {
   };
 
   // UPDATE TASK
-  const updateTask = async (
-    taskId: string,
-    updated: {
-      title: string;
-      description: string;
-    }
-  ) => {
-    const res = await axios.put(
-      `http://localhost:3001/api/projects/${projectId}/tasks/${taskId}`,
-      updated,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+  // const updateTask = async (
+  //   taskId: string,
+  //   updated: {
+  //     title: string;
+  //     description: string;
+  //   }
+  // ) => {
+  //   const res = await axios.put(
+  //     `http://localhost:3001/api/projects/${projectId}/tasks/${taskId}`,
+  //     updated,
+  //     {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     }
+  //   );
 
-    setTasks((prev) =>
-      prev.map((t) =>
-        t._id === taskId ? res.data : t
-      )
-    );
-  };
+  //   setTasks((prev) =>
+  //     prev.map((t) =>
+  //       t._id === taskId ? res.data : t
+  //     )
+  //   );
+  // };
 
   return {
     tasks,
     loading,
     createTask,
     deleteTask,
-    updateTask,
+   
     setTasks,
   };
 }

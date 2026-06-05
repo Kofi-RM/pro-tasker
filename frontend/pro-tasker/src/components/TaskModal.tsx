@@ -21,6 +21,7 @@ function TaskModal({ task, onClose, onSave }: TaskModalProps) {
 
 
   const handleSave = () => {
+    console.log({ title, description, status });
     onSave(task._id, {
       title,
       description,

@@ -48,6 +48,9 @@ function ProjectPage() {
     data: { title: string; description: string; status: string }
   ) => {
     try {
+      console.log("PROJECT ID:", projectId);
+console.log("TOKEN:", token);
+console.log("DATA:", data);
       console.log("here")
       const res = await axios.put(
         `http://localhost:3001/api/projects/${projectId}/tasks/${id}`,
@@ -58,8 +61,9 @@ function ProjectPage() {
           },
         }
       );
-      console.log(res.data)
-      console.log(res.status)
+      console.log("AXIOS FULL RESPONSE:", res);
+console.log("AXIOS DATA:", res.data);
+console.log(res.data.task)
 
       setTasks((current) =>
         current.map((task) =>

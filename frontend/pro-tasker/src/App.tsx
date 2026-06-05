@@ -14,6 +14,7 @@ function App() {
     <>
     <Navbar></Navbar>
     <Routes>
+          <Route path="/" element={<Login/>}></Route>
       <Route path="/login" element={<Login/>}></Route>
        <Route path="/dashboard" element={<Dashboard/>}></Route>
         <Route path="/dashboard/project/:projectId" element={<ProjectPage/>}></Route>

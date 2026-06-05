@@ -20,10 +20,6 @@ const taskSchema = new mongoose.Schema(
       default: "not complete",
     },
 
-    completed: {
-      type: Boolean,
-      default: false,
-    },
 
     project: {
       type: mongoose.Schema.Types.ObjectId,
