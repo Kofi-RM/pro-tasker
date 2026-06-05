@@ -6,6 +6,7 @@ import Project from "../components/Project";
 import Button from "../components/Button";
 import ProjectList from "../components/ProjectList";
 import { useViewMode } from "../context/ViewMode";
+import { useNavigate } from "react-router-dom";
 function Dashboard() {
   const [projects, setProjects] = useState<ProjectType[]>([]);
   const { token } = useAuth();
@@ -14,17 +15,19 @@ function Dashboard() {
   const [newTitle, setNewTitle] = useState("");
   const [newDescription, setNewDescription] = useState("");
 
-
+const navigate = useNavigate()
 
 const { viewMode, setViewMode } = useViewMode()
 
   useEffect(() => {
-    if (!token) return;
-
+    if (!token) {
+     navigate("/") 
+      return;
+    }
     const getProjects = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:3001/api/projects",
+          `${import.meta.env.VITE_API_URL}/api/projects`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -39,12 +42,16 @@ const { viewMode, setViewMode } = useViewMode()
     };
 
     getProjects();
-  }, [token, projects]);
+  }, [token, navigate]);
 
+
+  // useEffect( () => {
+
+  // }, [project])
   const createProject = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:3001/api/projects",
+        `${import.meta.env.VITE_API_URL}/api/projects`,
         {
           title: newTitle,
           description: newDescription,
@@ -56,7 +63,9 @@ const { viewMode, setViewMode } = useViewMode()
         }
       );
 
-      setProjects((prev) => [res.data, ...prev]);
+      console.log("CREATE PROJECT RESPONSE:", res.data);
+
+      setProjects((prev) => [res.data.project, ...prev]);
       setNewTitle("");
       setNewDescription("");
       setShowNewProject(false);
@@ -74,15 +83,15 @@ const { viewMode, setViewMode } = useViewMode()
       <div className="mb-10 flex items-center justify-between">
 
   {/* LEFT SIDE */}
-  <div className="text-center sm:text-left">
-    <h1 className="text-4xl font-extrabold text-slate-50 tracking-tight">
-      Your Projects
-    </h1>
+<div className="pl-4 flex flex-col gap-2 text-center sm:text-left">
+  <h1 className="text-4xl font-extrabold text-slate-50 tracking-tight">
+    Your Projects
+  </h1>
 
-    <p className="text-slate-400 mt-2">
-      Organize, track, and complete your work.
-    </p>
-  </div>
+  <p className="text-slate-400">
+    Organize, track, and complete your work.
+  </p>
+</div>
 
   {/* RIGHT SIDE CONTROLS */}
   <div className="flex items-center gap-3">

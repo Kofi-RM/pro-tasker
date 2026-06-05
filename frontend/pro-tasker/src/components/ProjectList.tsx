@@ -19,10 +19,7 @@ const ProjectList = ({ project }: ProjectProps) => {
 
     return(
         <>
-        <div
-        key={project._id}
-        className="bg-slate-900 border border-slate-800 rounded-xl p-4 hover:border-slate-700 transition flex items-center justify-between"
-      >
+        
          <div
          key={project._id}
       onClick={() =>
@@ -61,7 +58,7 @@ const ProjectList = ({ project }: ProjectProps) => {
           →
         </div>
  </div>     
- </div>
+
         </>
     )
 }

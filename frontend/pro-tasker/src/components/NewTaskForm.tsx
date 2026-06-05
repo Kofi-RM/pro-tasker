@@ -23,10 +23,10 @@ function NewTaskForm({
 
   const createTask = async () => {
     if (!title.trim()) return;
-
+console.log(projectId)
     try {
       const res = await axios.post(
-        `http://localhost:3001/api/projects/${projectId}/tasks`,
+        `${import.meta.env.VITE_API_URL}/api/projects/${projectId}/tasks`,
         {
           title,
           description,

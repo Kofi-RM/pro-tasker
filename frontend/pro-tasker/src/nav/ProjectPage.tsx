@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 
@@ -19,7 +19,8 @@ import type { TaskType } from "../type/Task";
 
 function ProjectPage() {
   let { token } = useAuth();
-    const {  checkedProjectId } = useAuth();
+    let {  projectId } = useParams();
+    if(!projectId) projectId=""
   const { state } = useLocation();
   const navigate = useNavigate();
 
@@ -31,8 +32,6 @@ function ProjectPage() {
 
   const [message, setMessage] = useState("");
   const [bannerType, setBannerType] = useState<"success" | "error">("success");
-
-
 
 const { viewMode, setViewMode } = useViewMode()
 
@@ -49,7 +48,7 @@ const { viewMode, setViewMode } = useViewMode()
 
 
   const { tasks, createTask, setTasks, deleteTask } = useTasks(
-    checkedProjectId,
+    projectId,
     token
   );
 
@@ -81,7 +80,7 @@ if (token =="") return <div>Please log in</div>;
 
     // only call API if something changed
     const res = await axios.put(
-      `http://localhost:3001/api/projects/${checkedProjectId}/tasks/${id}`,
+      `${import.meta.env.VITE_API_URL}/api/projects/${projectId}/tasks/${id}`,
       data,
       {
         headers: {
@@ -107,7 +106,7 @@ if (token =="") return <div>Please log in</div>;
   const deleteProject = async () => {
     try {
       await axios.delete(
-        `http://localhost:3001/api/projects/${checkedProjectId}`,
+        `${import.meta.env.VITE_API_URL}/api/projects/${projectId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -254,7 +253,7 @@ if (token =="") return <div>Please log in</div>;
   title="New Task"
 >
   <NewTaskForm
-    projectId={checkedProjectId!}
+    projectId={projectId}
     token={token}
     showMessage={showMessage}
     onTaskCreated={(task) => {
@@ -301,8 +300,28 @@ if (token =="") return <div>Please log in</div>;
     </Button>
   </div>
 </Modal>
-
+<button
+  onClick={() => navigate("/dashboard")}
+  className="
+    fixed
+    bottom-6
+    right-6
+    z-50
+    bg-slate-800
+    hover:bg-slate-700
+    border border-slate-700
+    text-slate-100
+    px-4
+    py-3
+    rounded-full
+    shadow-lg
+    transition
+  "
+>
+  ←
+</button>
       </main>
+      
     </div>
   );
 }

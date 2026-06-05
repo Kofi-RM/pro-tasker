@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import type { TaskType } from "../type/Task";
 
-export function useTasks(token: string ,projectId: string, ) {
+export function useTasks(projectId: string, token: string  ) {
   const [tasks, setTasks] = useState<TaskType[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -17,7 +17,7 @@ export function useTasks(token: string ,projectId: string, ) {
         setLoading(true);
 
         const res = await axios.get(
-          `http://localhost:3001/api/projects/${projectId}/tasks`,
+          `${import.meta.env.VITE_API_URL}/api/projects/${projectId}/tasks`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -41,7 +41,7 @@ export function useTasks(token: string ,projectId: string, ) {
     status:string
   }) => {
     const res = await axios.post(
-      `http://localhost:3001/api/projects/${projectId}/tasks`,
+      `${import.meta.env.VITE_API_URL}/api/projects/${projectId}/tasks`,
       data,
       {
         headers: {
@@ -56,7 +56,7 @@ export function useTasks(token: string ,projectId: string, ) {
   // DELETE TASK
   const deleteTask = async (taskId: string) => {
     await axios.delete(
-      `http://localhost:3001/api/projects/${projectId}/tasks/${taskId}`,
+      `${import.meta.env.VITE_API_URL}/api/projects/${projectId}/tasks/${taskId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -78,7 +78,7 @@ export function useTasks(token: string ,projectId: string, ) {
   //   }
   // ) => {
   //   const res = await axios.put(
-  //     `http://localhost:3001/api/projects/${projectId}/tasks/${taskId}`,
+  //     `${import.meta.env.VITE_API_URL}/api/projects/${projectId}/tasks/${taskId}`,
   //     updated,
   //     {
   //       headers: {

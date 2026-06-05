@@ -1,13 +1,14 @@
 
 import React, { useState } from "react";
-
+import { Link } from "react-router-dom";
 import axios from "axios";
-
+import Button from "../components/Button";
 function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+  const [showPassword, setShowPassword] = useState(false);
 
   // const navigate = useNavigate()
 
@@ -18,7 +19,7 @@ function Login() {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:3001/api/users/login",
+        `${import.meta.env.VITE_API_URL}/api/users/login`,
         {
           email,
           password,
@@ -41,7 +42,7 @@ function Login() {
 
   return (
   <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
-    <div className="absolute inset-0 overflow-hidden">
+<div className="absolute inset-0 overflow-hidden pointer-events-none">
       <div className="absolute top-0 left-0 h-96 w-96 bg-indigo-600/20 blur-3xl rounded-full" />
       <div className="absolute bottom-0 right-0 h-96 w-96 bg-cyan-500/20 blur-3xl rounded-full" />
     </div>
@@ -99,37 +100,51 @@ function Login() {
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">
-              Password
-            </label>
+         <div className="relative">
+  <label className="block text-sm font-medium text-slate-300 mb-2">
+    Password
+  </label>
 
-            <input
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) =>
-                setPassword(e.target.value)
-              }
-              required
-              className="
-                w-full
-                px-4
-                py-3
-                bg-slate-800
-                border
-                border-slate-700
-                rounded-xl
-                text-slate-100
-                placeholder-slate-500
-                focus:outline-none
-                focus:ring-2
-                focus:ring-indigo-500
-                focus:border-indigo-500
-                transition
-              "
-            />
-          </div>
+  <input
+    type={showPassword ? "text" : "password"}
+    placeholder="••••••••"
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+    required
+    className="
+      w-full
+      px-4
+      py-3
+      pr-12
+      bg-slate-800
+      border
+      border-slate-700
+      rounded-xl
+      text-slate-100
+      placeholder-slate-500
+      focus:outline-none
+      focus:ring-2
+      focus:ring-indigo-500
+      focus:border-indigo-500
+      transition
+    "
+  />
+
+  <button
+    type="button"
+    onClick={() => setShowPassword((prev) => !prev)}
+    className="
+      absolute
+      right-3
+      top-[42px]
+      text-slate-400
+      hover:text-slate-200
+      text-sm
+    "
+  >
+    {showPassword ? "Hide" : "Show"}
+  </button>
+</div>
 
           {error && (
             <div className="bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-xl p-3 text-sm">
@@ -172,10 +187,10 @@ function Login() {
           </div>
         </div>
 
-        <button
+        <Button
           onClick={() => {
             window.location.href =
-              "http://localhost:3001/api/users/auth/github";
+              `${import.meta.env.VITE_API_URL}/api/users/auth/github`;
           }}
           className="
             w-full
@@ -191,12 +206,20 @@ function Login() {
           "
         >
           Continue with GitHub
-        </button>
+        </Button>
+<div className="mt-6">
+  <p className="text-center text-slate-400 text-sm">
+    Don't have an account?{" "}
+    <Link
+      to="/register"
+      className="text-cyan-400 hover:text-cyan-300 font-medium"
+    >
+      Create one
+    </Link>
+  </p>
+</div>
 
-        <p className="text-center text-slate-500 text-sm mt-8">
-          Built for teams and individuals who get things done.
-        </p>
-      </div>
+</div>
     </div>
   </div>
 );}

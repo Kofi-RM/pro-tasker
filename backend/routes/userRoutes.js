@@ -16,6 +16,17 @@ router.get("/", async (req,res) => {
 
 // POST /api/users/register - Create a new user
 router.post('/register', async (req, res) => {
+  const { email } = req.body;
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+if (
+  !emailRegex.test(email) ||
+  blockedDomains.includes(domain)
+) {
+  return res.status(400).json({
+    message: "Please use a valid email address"
+  });
+}
   try {
     const user = await User.create(req.body);
     const token = signToken(user);

@@ -39,7 +39,7 @@ function ProjectInfoTile({
 
   try {
     const res = await axios.put(
-      `http://localhost:3001/api/projects/${project._id}`,
+      `${import.meta.env.VITE_API_URL}/api/projects/${project._id}`,
       {
         title: trimmedTitle,
         description: trimmedDescription,

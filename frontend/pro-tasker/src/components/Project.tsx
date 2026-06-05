@@ -59,7 +59,7 @@ const Project = ({ project }: ProjectProps) => {
 
       {/* Footer hint */}
       <div className="mt-4 text-xs text-slate-500 flex justify-between">
-        <span>Click to view tasks</span>
+   
         <span className="text-indigo-400 opacity-0 group-hover:opacity-100 transition">
           →
         </span>
