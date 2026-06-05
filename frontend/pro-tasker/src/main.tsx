@@ -4,7 +4,7 @@ import { AuthProvider } from './auth/AuthProvider.tsx'
 import './index.css'
 import App from './App.tsx'
 import { ViewModeProvider } from './context/ViewModeProvider.tsx'
-import {BrowserRouter} from "react-router"
+import { BrowserRouter } from 'react-router-dom'
 
 createRoot(document.getElementById('root')!).render(
 

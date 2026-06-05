@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Button from "../components/Button";
+import { useNavigate } from "react-router-dom";
 function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -10,7 +11,7 @@ function Login() {
   const [error, setError] = useState<string>("");
   const [showPassword, setShowPassword] = useState(false);
 
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,7 +31,7 @@ function Login() {
       localStorage.setItem("token", data.token);
 
       // redirect
-      window.location.href = "/dashboard";
+      navigate("/dashboard");
     } catch (err:unknown) {
      if (axios.isAxiosError(err)) {
     setError(err.response?.data?.message || "Login failed");

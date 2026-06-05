@@ -21,6 +21,7 @@ const { viewMode, setViewMode } = useViewMode()
 
   useEffect(() => {
     if (!token) {
+      console.log("no token")
      navigate("/") 
       return;
     }
