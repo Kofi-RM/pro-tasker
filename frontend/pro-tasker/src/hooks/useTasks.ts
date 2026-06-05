@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import type { TaskType } from "../type/Task";
 
-export function useTasks(projectId?: string, token?: string) {
+export function useTasks(token: string ,projectId: string, ) {
   const [tasks, setTasks] = useState<TaskType[]>([]);
   const [loading, setLoading] = useState(false);
 

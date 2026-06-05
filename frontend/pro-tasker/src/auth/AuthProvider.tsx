@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { AuthContext } from "./AuthContext";
 import type { ReactNode } from "react";
+import { useParams } from "react-router-dom";
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string | null>(
     localStorage.getItem("token")
@@ -16,9 +17,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setToken(null);
     localStorage.removeItem("token");
   };
-
+const {projectId} = useParams() 
+const checkedProjectId = projectId ?? "";
   return (
-    <AuthContext.Provider value={{ token, login, logout }}>
+    <AuthContext.Provider value={{ token, login, logout, checkedProjectId }}>
       {children}
     </AuthContext.Provider>
   );

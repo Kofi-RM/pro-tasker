@@ -3,10 +3,10 @@
 import { createContext } from "react";
 
 type AuthContextType = {
-  token: string;
+  token: string | null;
   login: (token: string) => void;
   logout: () => void;
-  projectId: string
+  checkedProjectId: string 
 };
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);

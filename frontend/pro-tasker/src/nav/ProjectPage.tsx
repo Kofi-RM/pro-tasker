@@ -1,4 +1,4 @@
-import { useLocation, useParams, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 
@@ -18,8 +18,8 @@ import { useViewMode } from "../context/ViewMode";
 import type { TaskType } from "../type/Task";
 
 function ProjectPage() {
-  const { token } = useAuth();
-  const { projectId } = useParams();
+  let { token } = useAuth();
+    const {  checkedProjectId } = useAuth();
   const { state } = useLocation();
   const navigate = useNavigate();
 
@@ -45,13 +45,17 @@ const { viewMode, setViewMode } = useViewMode()
     setTimeout(() => setMessage(""), 3000);
   };
 
+    if (!token) token = "";
+
+
   const { tasks, createTask, setTasks, deleteTask } = useTasks(
-    projectId,
+    checkedProjectId,
     token
   );
 
-  if (!token) return <div>Please log in</div>;
-  if (!project) return <div>Project not found</div>;
+if (token =="") return <div>Please log in</div>;
+
+
 
   // UPDATE TASK
   const updateTask = async (
@@ -77,7 +81,7 @@ const { viewMode, setViewMode } = useViewMode()
 
     // only call API if something changed
     const res = await axios.put(
-      `http://localhost:3001/api/projects/${projectId}/tasks/${id}`,
+      `http://localhost:3001/api/projects/${checkedProjectId}/tasks/${id}`,
       data,
       {
         headers: {
@@ -103,7 +107,7 @@ const { viewMode, setViewMode } = useViewMode()
   const deleteProject = async () => {
     try {
       await axios.delete(
-        `http://localhost:3001/api/projects/${projectId}`,
+        `http://localhost:3001/api/projects/${checkedProjectId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -250,7 +254,7 @@ const { viewMode, setViewMode } = useViewMode()
   title="New Task"
 >
   <NewTaskForm
-    projectId={projectId!}
+    projectId={checkedProjectId!}
     token={token}
     showMessage={showMessage}
     onTaskCreated={(task) => {
