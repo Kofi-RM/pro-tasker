@@ -6,9 +6,11 @@ const  Task  = require('../models/Task');
 const {authMiddleware} = require('../util/auth');
 
 router.get("/tasks", authMiddleware, async (req, res) => {
+  const projectId = req.params.projectId
 try {
     const tasks = await Task.find({
-        user: req.user._id
+        user: req.user._id,
+        project: projectId
     })
      res.json(tasks);
   } catch (err) {
@@ -69,7 +71,8 @@ router.put("/tasks/:taskId", authMiddleware, async (req, res) => {
 
     // ✏️ update fields
     task.title = req.body.title ?? task.title;
-   
+   task.description = req.body.description ?? task.description;
+   task.status = req.body.status ?? task.status;
 
     const updatedTask = await task.save();
 

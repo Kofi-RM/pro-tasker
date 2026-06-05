@@ -1,7 +1,8 @@
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 
+import Modal from "../components/Modal";
 import { useAuth } from "../auth/useAuth";
 import { useTasks } from "../hooks/useTasks";
 
@@ -18,15 +19,16 @@ function ProjectPage() {
   const { token } = useAuth();
   const { projectId } = useParams();
   const { state } = useLocation();
+  const navigate = useNavigate();
 
   const [project, setProject] = useState(state?.project);
   const [selectedTask, setSelectedTask] = useState<TaskType | null>(null);
+
   const [showNewTask, setShowNewTask] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const [message, setMessage] = useState("");
-  const [bannerType, setBannerType] = useState<"success" | "error">(
-    "success"
-  );
+  const [bannerType, setBannerType] = useState<"success" | "error">("success");
 
   const showMessage = (
     text: string,
@@ -37,7 +39,10 @@ function ProjectPage() {
     setTimeout(() => setMessage(""), 3000);
   };
 
- const { tasks, createTask, setTasks, deleteTask } = useTasks(projectId, token);
+  const { tasks, createTask, setTasks, deleteTask } = useTasks(
+    projectId,
+    token
+  );
 
   if (!token) return <div>Please log in</div>;
   if (!project) return <div>Project not found</div>;
@@ -48,10 +53,6 @@ function ProjectPage() {
     data: { title: string; description: string; status: string }
   ) => {
     try {
-      console.log("PROJECT ID:", projectId);
-console.log("TOKEN:", token);
-console.log("DATA:", data);
-      console.log("here")
       const res = await axios.put(
         `http://localhost:3001/api/projects/${projectId}/tasks/${id}`,
         data,
@@ -61,20 +62,37 @@ console.log("DATA:", data);
           },
         }
       );
-      console.log("AXIOS FULL RESPONSE:", res);
-console.log("AXIOS DATA:", res.data);
-console.log(res.data.task)
+
+      const updated = res.data.task ?? res.data;
 
       setTasks((current) =>
-        current.map((task) =>
-          task._id === id ? res.data : task
-        )
+        current.map((t) => (t._id === id ? updated : t))
       );
 
       showMessage("Task updated", "success");
     } catch (err) {
       console.error(err);
       showMessage("Failed to update task", "error");
+    }
+  };
+
+  // DELETE PROJECT
+  const deleteProject = async () => {
+    try {
+      await axios.delete(
+        `http://localhost:3001/api/projects/${projectId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      showMessage("Project deleted", "success");
+      navigate("/");
+    } catch (err) {
+      console.error(err);
+      showMessage("Failed to delete project", "error");
     }
   };
 
@@ -89,6 +107,15 @@ console.log(res.data.task)
           onProjectUpdated={setProject}
           showMessage={showMessage}
         />
+
+        <div className="mt-6">
+          <Button
+            variant="danger"
+            onClick={() => setShowDeleteConfirm(true)}
+          >
+            Delete Project
+          </Button>
+        </div>
       </aside>
 
       {/* MAIN */}
@@ -107,50 +134,73 @@ console.log(res.data.task)
           </Button>
         </div>
 
-        {/* NEW TASK */}
-        {showNewTask && (
-          <div className="mb-6 space-y-3">
-            <NewTaskForm
-              projectId={projectId!}
-              token={token}
-              showMessage={showMessage}
-              onTaskCreated={(task) => {
-                createTask(task);
-                showMessage("Task created");
-                setShowNewTask(false);
-              }}
-            />
-
-            <Button
-              variant="danger"
-              onClick={() => setShowNewTask(false)}
-            >
-              Cancel
-            </Button>
-          </div>
-        )}
-
         {/* TASK GRID */}
         {tasks.length === 0 ? (
           <p className="text-slate-400">No tasks yet.</p>
         ) : (
           <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-2">
             <TaskList
-  tasks={tasks}
-  onTaskClick={setSelectedTask}
-  onDelete={deleteTask}
-/>
+              tasks={tasks}
+              onTaskClick={(task) => setSelectedTask(task)}
+              onDelete={deleteTask}
+            />
           </div>
         )}
 
-        {/* MODAL */}
-        {selectedTask && (
-          <TaskModal
-            task={selectedTask}
-            onClose={() => setSelectedTask(null)}
-            onSave={updateTask}
-          />
-        )}
+        {/* NEW TASK MODAL */}
+        <Modal
+  isOpen={showNewTask}
+  onClose={() => setShowNewTask(false)}
+  title="New Task"
+>
+  <NewTaskForm
+    projectId={projectId!}
+    token={token}
+    showMessage={showMessage}
+    onTaskCreated={(task) => {
+      createTask(task);
+      setShowNewTask(false);
+      showMessage("Task created");
+    }}
+  />
+</Modal>
+
+        {/* TASK EDIT MODAL */}
+        <Modal
+  isOpen={!!selectedTask}
+  onClose={() => setSelectedTask(null)}
+  title="Edit Task"
+>
+  {selectedTask && (
+    <TaskModal
+      task={selectedTask}
+      onClose={() => setSelectedTask(null)}
+      onSave={updateTask}
+    />
+  )}
+</Modal>
+
+        {/* DELETE CONFIRM MODAL */}
+        <Modal
+  isOpen={showDeleteConfirm}
+  onClose={() => setShowDeleteConfirm(false)}
+  title="Delete Project"
+  size="sm"
+>
+  <p className="text-sm text-slate-400">
+    This action cannot be undone.
+  </p>
+
+  <div className="flex justify-end gap-2 mt-5">
+    <Button onClick={() => setShowDeleteConfirm(false)}>
+      Cancel
+    </Button>
+
+    <Button variant="danger" onClick={deleteProject}>
+      Delete
+    </Button>
+  </div>
+</Modal>
 
       </main>
     </div>

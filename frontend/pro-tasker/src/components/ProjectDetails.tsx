@@ -118,9 +118,6 @@ function ProjectDetails({
               Edit Project
             </Button>
 
-            <Button variant="danger">
-              Delete Project
-            </Button>
           </div>
         </>
       )}

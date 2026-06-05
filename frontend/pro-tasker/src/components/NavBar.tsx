@@ -28,12 +28,7 @@ function Navbar() {
         <div className="flex items-center gap-4">
           {token && (
             <>
-              <Link
-                to="/projects"
-                className="text-slate-300 hover:text-white transition"
-              >
-                Projects
-              </Link>
+              
 
               <Link
                 to="/dashboard"

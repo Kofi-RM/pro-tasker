@@ -11,7 +11,21 @@ type TaskProps = {
 };
 
 function Task({ task, onClick, onDelete}: TaskProps) {
-    
+    const getStatusColor = (status?: string) => {
+  switch (status) {
+    case "complete":
+      return "bg-green-500/10 text-green-400 border-green-500/30";
+
+    case "in progress":
+      return "bg-yellow-500/10 text-yellow-300 border-yellow-500/30";
+
+    case "not complete":
+      return "bg-red-500/10 text-red-400 border-red-500/30";
+
+    default:
+      return "bg-slate-800 text-slate-300 border-slate-700";
+  }
+};
   return (
     <div
       onClick={onClick}
@@ -71,9 +85,19 @@ function Task({ task, onClick, onDelete}: TaskProps) {
       )}
 
       {task.status && (
-        <span className="text-[10px] mt-2 inline-block px-2 py-0.5 rounded bg-slate-800 text-slate-300">
-          {task.status}
-        </span>
+        <span
+  className={`
+    text-[10px]
+    mt-2
+    inline-block
+    px-2 py-0.5
+    rounded-md
+    border
+    ${getStatusColor(task.status)}
+  `}
+>
+  {task.status}
+</span>
       )}
     </div>
   );
