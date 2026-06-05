@@ -3,49 +3,63 @@ import axios from "axios";
 import Button from "./Button";
 import type { ProjectType } from "../type/Project";
 
-type ProjectDetailsProps = {
+type ProjectInfoProps = {
   project: ProjectType;
   token: string;
   onProjectUpdated: (project: ProjectType) => void;
   showMessage: (message: string) => void;
 };
 
-function ProjectDetails({
+function ProjectInfoTile({
   project,
   token,
   onProjectUpdated,
   showMessage,
-}: ProjectDetailsProps) {
+}: ProjectInfoProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(project.title);
   const [description, setDescription] = useState(
     project.description || ""
   );
-
+ 
+    
   const saveProject = async () => {
-    try {
-      const res = await axios.put(
-        `http://localhost:3001/api/projects/${project._id}`,
-        {
-          title,
-          description,
+  const trimmedTitle = title.trim();
+  const trimmedDescription = description.trim();
+
+  // Nothing changed
+  if (
+    trimmedTitle === project.title &&
+    trimmedDescription === (project.description || "")
+  ) {
+    showMessage("No changes to save");
+    setIsEditing(false);
+    return;
+  }
+
+  try {
+    const res = await axios.put(
+      `http://localhost:3001/api/projects/${project._id}`,
+      {
+        title: trimmedTitle,
+        description: trimmedDescription,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      }
+    );
 
-      onProjectUpdated(res.data);
-      setIsEditing(false);
+    onProjectUpdated(res.data);
+    setIsEditing(false);
 
-      showMessage("Project updated successfully");
-    } catch (err) {
-      console.error(err);
-      showMessage("Failed to update project");
-    }
-  };
+    showMessage("Project updated successfully");
+  } catch (err) {
+    console.error(err);
+    showMessage("Failed to update project");
+  }
+};
 
   const cancelEdit = () => {
     setTitle(project.title);
@@ -103,26 +117,25 @@ function ProjectDetails({
         </div>
       ) : (
         <>
-          <h1 className="text-4xl font-extrabold text-slate-50 tracking-tight">
+          <h1 className="text-4xl font-extrabold text-slate-50 tracking-tight m-4">
             {project.title}
           </h1>
 
-          <p className="text-slate-300 mt-3">
+          <p className="text-slate-300 m-2">
             {project.description}
           </p>
 
-          <div className="mt-6 flex gap-2">
-            <Button
-              onClick={() => setIsEditing(true)}
-            >
-              Edit Project
-            </Button>
-
-          </div>
+         <div className="mt-6 flex justify-center">
+  <div className="flex gap-2">
+    <Button onClick={() => setIsEditing(true)}>
+      Edit Project
+    </Button>
+  </div>
+</div>
         </>
       )}
     </div>
   );
 }
 
-export default ProjectDetails;
+export default ProjectInfoTile;

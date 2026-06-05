@@ -21,7 +21,9 @@ function Navbar() {
     
           className="text-2xl font-bold text-slate-50"
         >
+          <Link to="http://localhost:5173/dashboard">
           <span className="text-cyan-400">Pro</span> Tasker
+        </Link>
         </div>
 
         {/* Links */}

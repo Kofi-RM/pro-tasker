@@ -34,7 +34,7 @@ function Modal({
         onClick={(e) => e.stopPropagation()}
       >
         {/* HEADER */}
-        {(title || onClose) && (
+        {(title ) && (
           <div className="flex justify-between items-center mb-4">
             {title && (
               <h2 className="text-base font-semibold text-slate-100">

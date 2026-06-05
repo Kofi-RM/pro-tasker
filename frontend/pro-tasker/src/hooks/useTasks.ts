@@ -67,8 +67,6 @@ export function useTasks(projectId?: string, token?: string) {
     setTasks((prev) =>
       prev.filter((t) => t._id !== taskId)
     );
-
-    console.log(tasks)
   };
 
   // UPDATE TASK

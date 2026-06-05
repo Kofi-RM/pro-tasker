@@ -14,7 +14,7 @@ function Banner({
       className={`
         fixed
         top-4
-        right-4
+        right-88
         px-6
         py-3
         rounded-xl

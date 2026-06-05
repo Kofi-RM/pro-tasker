@@ -1,49 +1,31 @@
 type ButtonProps = {
   children: React.ReactNode;
   onClick?: () => void;
-  type?: "button" | "submit" | "reset";
-  variant?: "primary" | "danger" | "success";
-  size?: "sm" | "md" | "icon";
+  variant?: "primary" | "success" | "danger" | "ghost";
+  className?: string;
 };
 
 function Button({
   children,
   onClick,
-  type = "button",
   variant = "primary",
-  size = "md",
+  className = "",
 }: ButtonProps) {
-  const variants = {
-    primary: "bg-blue-600 hover:bg-blue-700 focus:ring-blue-500",
-    danger: "bg-red-600 hover:bg-red-700 focus:ring-red-500",
-    success: "bg-green-600 hover:bg-green-700 focus:ring-green-500",
-  };
+  const base =
+    "inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium transition focus:outline-none";
 
-  const sizes = {
-    sm: "px-3 py-1 text-sm",
-    md: "px-4 py-2",
-    icon: "w-7 h-7 p-0 text-sm flex items-center justify-center",
+  const styles = {
+    primary: "bg-indigo-600 hover:bg-indigo-500 text-white",
+    success: "bg-green-600 hover:bg-green-500 text-white",
+    danger: "bg-red-600 hover:bg-red-500 text-white",
+    ghost:
+      "bg-transparent text-slate-400 hover:text-white hover:bg-slate-800",
   };
 
   return (
     <button
-      type={type}
       onClick={onClick}
-      className={`
-        rounded-md
-        text-white
-        font-medium
-        shadow-sm
-        transition-all
-        duration-150
-        hover:-translate-y-0.5
-        hover:shadow-md
-        active:translate-y-0
-        focus:outline-none
-        focus:ring-2
-        ${variants[variant]}
-        ${sizes[size]}
-      `}
+      className={`${base} ${styles[variant]} ${className}`}
     >
       {children}
     </button>
