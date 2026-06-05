@@ -21,42 +21,38 @@ try {
 router.post('/tasks',authMiddleware, async (req, res) => {
 
 console.log(req.params.projectId)
-    try {
-   const task = await Task.create({
-  ...req.body,
-  user: req.user._id,
-  project: req.params.projectId
+     try {
+      const task = await Task.create({
+        title: req.body.title,
+        description: req.body.description || "",
+        status: req.body.status || "not complete",
+        project: req.params.projectId,
+        user: req.user._id,
+      });
+
+      return res.status(201).json(task);
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({ error: err.message });
+    }
 });
 
+router.delete("/tasks/:taskId", authMiddleware, async (req,res) => {
+  const { taskId } = req.params;
 
-    res.status(201).json({ task });
-  } catch (err) {
-   res.status(400).json({
-  error: err.message
-});
-  }
-});
-
-router.delete("/tasks/:taskId", authMiddleware, (req,res) => {
-  const id = req.params.taskId;
+    const task = await Task.findById(taskId);
 
     if (task.user.toString() !== req.user._id) {
       return res.status(403).json({ message: "Unauthorized" });
     }
-    
+
   Task.findByIdAndDelete(taskId)
    .then(task => res.json(task))
     .catch(err => res.status(500).json(err));
 })
  
-router.post('/task/:taskId', authMiddleware, (req, res) => {
-  const { done } = req.body;
-  Task.findByIdAndUpdate(req.params.id, { done })
-    .then(task => res.json(task))
-    .catch(err => res.json(500, err));
-});
 
-router.put("/task/:taskId", authMiddleware, async (req, res) => {
+router.put("/tasks/:taskId", authMiddleware, async (req, res) => {
   try {
     const { taskId } = req.params;
 
@@ -68,7 +64,7 @@ router.put("/task/:taskId", authMiddleware, async (req, res) => {
 
     // 🔒 ownership check (important)
     if (task.user.toString() !== req.user._id) {
-      return res.status(403).json({ message: "Unauthorized" });
+      return res.status(403).json({ message: "Unauthorized ffsdfasd" });
     }
 
     // ✏️ update fields

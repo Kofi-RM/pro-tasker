@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { useAuth } from "./auth/useAuth";
-import Button from "./components/Button";
+import { useAuth } from "../auth/useAuth";
+import Button from "./Button";
 import { useNavigate } from "react-router-dom";
 
 function Navbar() {

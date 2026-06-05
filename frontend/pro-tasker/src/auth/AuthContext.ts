@@ -3,7 +3,7 @@
 import { createContext } from "react";
 
 type AuthContextType = {
-  token: string | null;
+  token: string;
   login: (token: string) => void;
   logout: () => void;
 };

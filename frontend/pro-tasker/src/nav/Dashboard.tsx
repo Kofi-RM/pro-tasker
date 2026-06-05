@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useAuth } from "./auth/useAuth";
-import type { ProjectType } from "./type/Project";
-import Project from "./components/Project";
+import { useAuth } from "../auth/useAuth";
+import type { ProjectType } from "../type/Project";
+import Project from "../components/Project";
 
 function Dashboard() {
   const [projects, setProjects] = useState<ProjectType[]>([]);

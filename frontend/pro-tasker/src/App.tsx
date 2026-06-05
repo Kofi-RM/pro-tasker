@@ -1,12 +1,12 @@
 
 import './App.css'
 import {Routes, Route} from "react-router-dom"
-import Login from './Login'
-import Dashboard from './Dashboard'
-import ProjectPage from './ProjectPage'
-import Register from './Register'
-import OAuthSuccess from './OAuthSuccess'
-import Navbar from './NavBar'
+import Login from './nav/Login'
+import Dashboard from './nav/Dashboard'
+import ProjectPage from './nav/ProjectPage'
+import Register from './nav/Register'
+import OAuthSuccess from './nav/OAuthSuccess'
+import Navbar from './components/NavBar'
 
 function App() {
 
