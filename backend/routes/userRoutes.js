@@ -68,7 +68,7 @@ router.post('/login', async (req, res) => {
 // Visiting this endpoint redirects the browser to GitHub's login page.
 router.get(
   '/auth/github',
-  passport.authenticate('github', { scope: ['user:email'] }) // Request email scope
+  passport.authenticate('github', { scope: ['user:email'], prompt: 'login', }) // Request email scope
 );
  
 // GitHub OAuth callback route.  
@@ -77,7 +77,8 @@ router.get(
   '/auth/github/callback',
   passport.authenticate('github', {
     failureRedirect: '/login', // Where to redirect if user denies
-    session: false // We are using tokens, not sessions
+    session: false,
+     // We are using tokens, not sessions
   }),
   (req, res) => {
     // At this point, `req.user` is the user profile returned from the verify callback.
