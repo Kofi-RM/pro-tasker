@@ -1,3 +1,5 @@
+// MongoDB connection helper.
+// Loads the connection string from .env and exports the Mongoose connection.
 const mongoose = require('mongoose');
 require("dotenv").config()
  

@@ -1,3 +1,4 @@
+// Project detail page. Shows project metadata, task list, and task management actions.
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
@@ -47,6 +48,7 @@ const { viewMode, setViewMode } = useViewMode()
     if (!token) token = "";
 
 
+  // Custom hook loads tasks for the current project and exposes mutation helpers.
   const { tasks, createTask, setTasks, deleteTask } = useTasks(
     projectId,
     token
@@ -56,7 +58,7 @@ if (token =="") return <div>Please log in</div>;
 
 
 
-  // UPDATE TASK
+  // UPDATE TASK: only call the API if task data actually changed.
   const updateTask = async (
   id: string,
   data: { title: string; description: string; status: string }
@@ -102,7 +104,7 @@ if (token =="") return <div>Please log in</div>;
   }
 };
 
-  // DELETE PROJECT
+  // DELETE PROJECT: remove the project and navigate back to dashboard.
   const deleteProject = async () => {
     try {
       await axios.delete(

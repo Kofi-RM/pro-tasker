@@ -1,3 +1,4 @@
+// Reusable button component with theme variants and disabled styling.
 type ButtonProps = {
   children: React.ReactNode;
   onClick?: () => void;

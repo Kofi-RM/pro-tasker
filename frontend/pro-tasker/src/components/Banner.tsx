@@ -1,3 +1,4 @@
+// Small floating banner for success/error messages.
 type BannerProps = {
   message: string;
   type?: "success" | "error";

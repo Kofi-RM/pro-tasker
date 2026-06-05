@@ -1,8 +1,10 @@
+// User-related routes: registration, login, and GitHub OAuth.
 const router = require('express').Router();
 const  User  = require('../models/User');
 const { signToken } = require('../util/auth');
 const passport = require("../util/passport")
 
+// GET /api/users - return all users (mainly for development / debugging).
 router.get("/", async (req,res) => {
   try {
     const users = await User.find()
@@ -14,21 +16,20 @@ router.get("/", async (req,res) => {
   }
 })
 
-// POST /api/users/register - Create a new user
+// POST /api/users/register - create a new account and return a JWT
 router.post('/register', async (req, res) => {
   const { email } = req.body;
 
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-if (
-  !emailRegex.test(email) 
-) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (
+    !emailRegex.test(email) 
+  ) {
   return res.status(400).json({
     message: "Please use a valid email address"
   });
 }
 
-console.log("BODY:", req.body);
-console.log("USER:", req.user);
+
   try {
     const user = await User.create(req.body);
     const token = signToken(user);
@@ -43,7 +44,7 @@ console.log("USER:", req.user);
   }
 });
  
-// POST /api/users/login - Authenticate a user and return a token
+// POST /api/users/login - Authenticate a user and return a JWT token
 router.post('/login', async (req, res) => {
   const user = await User.findOne({ email: req.body.email });
  
@@ -61,14 +62,15 @@ router.post('/login', async (req, res) => {
   res.json({ token, user });
 });
  
-// Route to start the OAuth flow
-// When a user visits this URL, they will be redirected to GitHub to log in.
+// Route to start the GitHub OAuth flow.
+// Visiting this endpoint redirects the browser to GitHub's login page.
 router.get(
   '/auth/github',
   passport.authenticate('github', { scope: ['user:email'] }) // Request email scope
 );
  
-// The callback route that GitHub will redirect to after the user approves.
+// GitHub OAuth callback route.  
+// If authentication succeeds, issue a local JWT and redirect to the frontend.
 router.get(
   '/auth/github/callback',
   passport.authenticate('github', {

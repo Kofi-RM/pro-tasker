@@ -1,9 +1,11 @@
+// Routes for project CRUD operations.
+// All project routes are protected and require a valid JWT.
 const router = require('express').Router();
 const  Project  = require('../models/Project');
 const taskRoutes = require("./taskRoutes")
 const {authMiddleware} = require("../util/auth")
 
-// get all projects
+// GET /api/projects - return all projects for the logged in user
 router.get("/", authMiddleware,  async (req, res) => {
 try {
     const projects = await Project.find({
@@ -105,5 +107,7 @@ router.delete('/:projectId', authMiddleware, async (req, res) => {
   }
 });
 
-router.use("/:projectId", authMiddleware, taskRoutes)
+// Mount task routes under /api/projects/:projectId.
+// mergeParams in the task router will preserve projectId for task APIs.
+router.use("/:projectId", authMiddleware, taskRoutes);
 module.exports = router;

@@ -1,4 +1,5 @@
 
+// AuthProvider stores the current JWT token and provides login/logout helpers.
 import { useState } from "react";
 import { AuthContext } from "./AuthContext";
 import type { ReactNode } from "react";

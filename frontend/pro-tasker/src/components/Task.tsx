@@ -1,4 +1,5 @@
 
+// Single task card with delete button and status indicator.
 type TaskProps = {
   task: {
     _id: string;

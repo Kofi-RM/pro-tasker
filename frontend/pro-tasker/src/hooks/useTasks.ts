@@ -1,3 +1,4 @@
+// Custom hook that loads and mutates tasks for a specific project.
 import { useEffect, useState } from "react";
 import axios from "axios";
 import type { TaskType } from "../type/Task";
@@ -6,11 +7,9 @@ export function useTasks(projectId: string, token: string  ) {
   const [tasks, setTasks] = useState<TaskType[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const showAuth = !!projectId && !!token;
-
   // GET TASKS
   useEffect(() => {
-    if (!showAuth) return;
+    if (!projectId || !token) return;
 
     const fetchTasks = async () => {
       try {

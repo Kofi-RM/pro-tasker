@@ -1,3 +1,4 @@
+// Frontend entrypoint: wraps the App with routing, auth state, and view-mode state.
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { AuthProvider } from './auth/AuthProvider.tsx'

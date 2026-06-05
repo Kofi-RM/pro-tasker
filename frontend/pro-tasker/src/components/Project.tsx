@@ -1,3 +1,4 @@
+// Small card used to display a project in tile view.
 type ProjectProps = {
   project: {
     _id: string;

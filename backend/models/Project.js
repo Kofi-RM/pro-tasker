@@ -1,3 +1,5 @@
+// Schema for project documents.
+// Each project belongs to a user via the `user` field.
 const mongoose = require('mongoose');
 
 const projectSchema = new mongoose.Schema({

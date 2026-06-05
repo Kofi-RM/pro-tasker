@@ -1,3 +1,5 @@
+// Task routes for a specific project.
+// These are mounted under /api/projects/:projectId.
 const router = require('express').Router({
   mergeParams: true
 });
@@ -5,6 +7,7 @@ const  Task  = require('../models/Task');
 
 const {authMiddleware} = require('../util/auth');
 
+// GET /api/projects/:projectId/tasks - list tasks for the current project.
 router.get("/tasks", authMiddleware, async (req, res) => {
   const projectId = req.params.projectId
 try {
@@ -22,7 +25,7 @@ try {
 
 router.post('/tasks',authMiddleware, async (req, res) => {
 
-console.log(req.params.projectId)
+  console.log(req.params.projectId)
      try {
       const task = await Task.create({
         title: req.body.title,
@@ -42,9 +45,10 @@ console.log(req.params.projectId)
 router.delete("/tasks/:taskId", authMiddleware, async (req,res) => {
   const { taskId } = req.params;
 
-    const task = await Task.findById(taskId);
+  const task = await Task.findById(taskId);
 
-    if (task.user.toString() !== req.user._id) {
+  // Only the owner of the task can delete it.
+  if (task.user.toString() !== req.user._id) {
       return res.status(403).json({ message: "Unauthorized" });
     }
 
@@ -54,6 +58,7 @@ router.delete("/tasks/:taskId", authMiddleware, async (req,res) => {
 })
  
 
+// PUT /api/projects/:projectId/tasks/:taskId - update a task's title, description, or status.
 router.put("/tasks/:taskId", authMiddleware, async (req, res) => {
   try {
     const { taskId } = req.params;

@@ -1,3 +1,6 @@
+// JWT helper functions for the backend.  
+// - authMiddleware validates the token and attaches req.user.
+// - signToken creates a new JWT for a logged-in user.
 const jwt = require('jsonwebtoken');
  require("dotenv").config()
 const secret = process.env.JWT_SECRET;

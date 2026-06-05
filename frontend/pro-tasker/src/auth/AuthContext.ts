@@ -9,4 +9,5 @@ type AuthContextType = {
 
 };
 
+// Auth context provides token state and login/logout helpers to the app.
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);

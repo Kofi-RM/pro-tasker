@@ -1,3 +1,4 @@
+// Top navigation bar that shows login/logout controls based on auth state.
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/useAuth";
 import Button from "./Button";

@@ -8,6 +8,8 @@ import Register from './nav/Register'
 import OAuthSuccess from './nav/OAuthSuccess'
 import Navbar from './components/NavBar'
 
+// App component defines the client-side routes for the SPA.
+// Each Route maps a URL path to a page component.
 function App() {
 
   return (

@@ -1,3 +1,4 @@
+// List wrapper for Task cards. Delegates each task to the Task component.
 import Task from "./Task";
 import type { TaskType } from "../type/Task";
 

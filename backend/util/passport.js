@@ -1,3 +1,5 @@
+// Passport configuration for GitHub OAuth.
+// This file registers the GitHub strategy and serializes users for session handling.
 const passport = require('passport');
 const GitHubStrategy = require('passport-github2').Strategy;
 const User = require('../models/User');
@@ -9,18 +11,17 @@ passport.use(
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
       callbackURL: process.env.GITHUB_CALLBACK_URL, // e.g., 'http://localhost:3001/api/users/auth/github/callback'
     },
-    // This is the "verify" callback
+    // This is the "verify" callback executed after GitHub returns a user profile.
     async (accessToken, refreshToken, profile, done) => {
       try {
-        // The "profile" object contains the user's GitHub information
+        // Look for an existing user with the GitHub account id.
         const existingUser = await User.findOne({ githubId: profile.id });
  
         if (existingUser) {
-          // If user already exists, pass them to the next middleware
           return done(null, existingUser);
         }
  
-        // If it's a new user, create a record in our database
+        // Create a new user record for first-time GitHub logins.
         const newUser = new User({
           githubId: profile.id,
           username: profile.username,
@@ -36,7 +37,7 @@ passport.use(
   )
 );
  
-// These functions are needed for session management
+// These functions are only required if using sessions with passport.
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });

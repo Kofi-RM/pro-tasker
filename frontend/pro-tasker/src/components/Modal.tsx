@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 
+// Generic overlay modal used for forms, confirmations, and editing screens.
 type ModalProps = {
   isOpen: boolean;
   onClose: () => void;

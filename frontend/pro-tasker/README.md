@@ -221,3 +221,8 @@ Notes & Tips
 - For testing protected endpoints use the token returned from `/api/users/login` or `/api/users/register` and include it in the `Authorization` header: `Authorization: Bearer <token>`.
 - When deploying, ensure CORS/allowed origins include your frontend host (see `server.js` `allowedOrigins`).
 
+
+🧠 Future Improvements
+Drag-and-drop task ordering
+Due dates & reminders
+Light/Dark Mode

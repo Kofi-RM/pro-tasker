@@ -1,4 +1,5 @@
 
+// Project row used for list view in the dashboard.
 type ProjectProps = {
   project: {
     _id: string;

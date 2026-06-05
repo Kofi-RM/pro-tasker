@@ -1,3 +1,5 @@
+// Provides the current view mode (tiles or list) to the app.
+// Persists the preference in localStorage.
 import { useState } from "react";
 import type { ReactNode } from "react";
 import type {ViewMode} from "./ViewMode"

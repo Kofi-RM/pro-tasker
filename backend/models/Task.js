@@ -1,3 +1,5 @@
+// Schema for task documents.
+// A task belongs to both a project and a user.
 const mongoose = require("mongoose");
 
 const taskSchema = new mongoose.Schema(

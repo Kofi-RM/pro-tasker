@@ -1,3 +1,4 @@
+// Modal for editing existing task details and status.
 import { useState } from "react";
 import Button from "./Button";
 import type { TaskType } from "../type/Task";

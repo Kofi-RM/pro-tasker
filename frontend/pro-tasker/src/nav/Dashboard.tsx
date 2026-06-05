@@ -1,3 +1,4 @@
+// Dashboard page shows the user's projects and supports tile/list view.
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../auth/useAuth";
@@ -19,6 +20,7 @@ const navigate = useNavigate()
 
 const { viewMode, setViewMode } = useViewMode()
 
+  // Load projects for the authenticated user.
   useEffect(() => {
     if (!token) {
       console.log("no token")
@@ -49,6 +51,7 @@ const { viewMode, setViewMode } = useViewMode()
   // useEffect( () => {
 
   // }, [project])
+  // POST a new project to the API and update local state.
   const createProject = async () => {
     try {
       const res = await axios.post(

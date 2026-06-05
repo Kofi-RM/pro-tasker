@@ -1,3 +1,4 @@
+// Sidebar panel for viewing and editing project metadata.
 import { useState } from "react";
 import axios from "axios";
 import Button from "./Button";

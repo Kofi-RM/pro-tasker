@@ -1,5 +1,5 @@
-// OAuthSuccess.tsx
-
+// Page shown after GitHub OAuth redirect.
+// Reads token from URL and logs the user in.
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/useAuth";

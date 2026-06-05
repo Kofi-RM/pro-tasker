@@ -1,3 +1,5 @@
+// Mongoose schema for users.
+// Supports both local email/password accounts and GitHub OAuth users.
 const mongoose = require("mongoose")
 const bcrypt = require("bcrypt")
 const {Schema} = mongoose;
@@ -30,10 +32,10 @@ type:String,
 
 userSchema.pre("save", async function (next) {
        try {
-    // Skip OAuth users
+    // Skip password hashing for users who signed up with GitHub OAuth.
     if (!this.password) return;
 
-    // Only hash if password was changed
+    // Only hash when the password field is new or changed.
     if (!this.isModified("password")) return;
 
     const saltRounds = 10;
@@ -45,6 +47,7 @@ userSchema.pre("save", async function (next) {
   }
 })
 
+// Compare a plain-text password to the hashed password stored in the database.
 userSchema.methods.isCorrectPassword = async function (password) {
   return bcrypt.compare(password, this.password);
 };

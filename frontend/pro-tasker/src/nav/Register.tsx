@@ -1,4 +1,5 @@
 
+// Registration page for creating a new account and storing the JWT.
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "../components/Button";

@@ -7,6 +7,7 @@ export type ViewModeContextType = {
   setViewMode: (mode: ViewMode) => void;
 };
 
+// Global context to remember whether the user prefers tile or list layout.
 export const ViewModeContext = createContext<ViewModeContextType | undefined>(
   undefined
 );
