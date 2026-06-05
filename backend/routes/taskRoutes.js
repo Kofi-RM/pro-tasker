@@ -38,10 +38,10 @@ console.log(req.params.projectId)
 });
 
 router.delete("/tasks/:taskId", authMiddleware, async (req,res) => {
-   const { taskId } = req.params;
+  const { taskId } = req.params;
 
     const task = await Task.findById(taskId);
-console.log(taskId)
+
     if (task.user.toString() !== req.user._id) {
       return res.status(403).json({ message: "Unauthorized" });
     }

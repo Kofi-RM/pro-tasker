@@ -37,7 +37,7 @@ function ProjectPage() {
     setTimeout(() => setMessage(""), 3000);
   };
 
-  const { tasks, createTask, setTasks } = useTasks(projectId, token);
+ const { tasks, createTask, setTasks, deleteTask } = useTasks(projectId, token);
 
   if (!token) return <div>Please log in</div>;
   if (!project) return <div>Project not found</div>;
@@ -136,9 +136,10 @@ console.log(res.data.task)
         ) : (
           <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-2">
             <TaskList
-              tasks={tasks}
-              onTaskClick={(task) => setSelectedTask(task)}
-            />
+  tasks={tasks}
+  onTaskClick={setSelectedTask}
+  onDelete={deleteTask}
+/>
           </div>
         )}
 
