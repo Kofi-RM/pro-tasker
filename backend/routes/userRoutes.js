@@ -68,7 +68,9 @@ router.post('/login', async (req, res) => {
 // Visiting this endpoint redirects the browser to GitHub's login page.
 router.get(
   '/auth/github',
-  passport.authenticate('github', { scope: ['user:email'], prompt: 'login', }) // Request email scope
+  passport.authenticate('github', { scope: ['user:email'], authorizationParams: {
+      prompt: 'login',     // Appended directly to GitHub OAuth URL
+    } }) // Request email scope
 );
  
 // GitHub OAuth callback route.  
