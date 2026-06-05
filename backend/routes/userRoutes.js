@@ -20,21 +20,26 @@ router.post('/register', async (req, res) => {
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 if (
-  !emailRegex.test(email) ||
-  blockedDomains.includes(domain)
+  !emailRegex.test(email) 
 ) {
   return res.status(400).json({
     message: "Please use a valid email address"
   });
 }
+
+console.log("BODY:", req.body);
+console.log("USER:", req.user);
   try {
     const user = await User.create(req.body);
     const token = signToken(user);
     res.status(201).json({ token, user });
   } catch (err) {
-   res.status(400).json({
-  error: err.message
-});
+   console.error("POST ERROR:", err);
+
+  res.status(500).json({
+    message: "Internal Server Error",
+    error: err.message || "Unknown error"
+  });
   }
 });
  

@@ -20,13 +20,14 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin) return callback(null, true); // allow server-to-server / Postman
+    if (!origin) return callback(null, true);
 
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
     }
 
-    return callback(new Error("Not allowed by CORS"));
+    console.log("BLOCKED CORS:", origin); // 🔥 ADD THIS
+    return callback(null, false); // ❗ DO NOT throw error
   },
   credentials: true
 }));
@@ -40,4 +41,17 @@ app.use("/api/users", userRoutes);
  app.use("/api/projects", projectRoutes)
 db.once('open', () => {
   app.listen(PORT, () => console.log(`🌍 Now listening on localhost:${PORT}`));
+});
+
+app.use((err, req, res, next) => {
+  console.error("🔥 GLOBAL ERROR:", err);
+
+  res.status(500).json({
+    message: err.message,
+  });
+});
+
+app.use((req, res, next) => {
+  console.log("➡️", req.method, req.url);
+  next();
 });
