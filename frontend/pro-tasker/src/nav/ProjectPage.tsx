@@ -1,6 +1,6 @@
 // Project detail page. Shows project metadata, task list, and task management actions.
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 import Modal from "../components/Modal";
@@ -17,9 +17,9 @@ import Button from "../components/Button";
 import { useViewMode } from "../context/ViewMode";
 
 import type { TaskType } from "../type/Task";
-
+import isTokenExpired from "../auth/tokenCheck";
 function ProjectPage() {
-  let { token } = useAuth();
+const { token,logout } = useAuth();
     let {  projectId } = useParams();
     if(!projectId) projectId=""
   const { state } = useLocation();
@@ -36,6 +36,8 @@ function ProjectPage() {
 
 const { viewMode, setViewMode } = useViewMode()
 
+
+
   const showMessage = (
     text: string,
     type: "success" | "error" = "success"
@@ -44,8 +46,16 @@ const { viewMode, setViewMode } = useViewMode()
     setBannerType(type);
     setTimeout(() => setMessage(""), 3000);
   };
+useEffect(() => {
+  if (!token) {
+    navigate("/login");
+    return;
+  }
 
-    if (!token) token = "";
+  if (isTokenExpired(token)) {
+    logout();
+  }
+}, [token, logout, navigate]);
 
 
   // Custom hook loads tasks for the current project and exposes mutation helpers.
@@ -54,7 +64,19 @@ const { viewMode, setViewMode } = useViewMode()
     token
   );
 
-if (token =="") return <div>Please log in</div>;
+const todoTasks = tasks.filter(
+  (t) => t.status === "todo"
+);
+
+const inProgressTasks = tasks.filter(
+  (t) => t.status === "in progress"
+);
+
+const completeTasks = tasks.filter(
+  (t) => t.status === "complete"
+);
+
+
 
 
 

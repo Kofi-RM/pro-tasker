@@ -44,18 +44,20 @@ const handleLogoClick = () => {
             </Link>
           )}
 
-          {token ? (
-            <Button variant="danger" onClick={handleLogout}>
-              Log Out
-            </Button>
-          ) : (
-            <Button
-              variant="primary"
-              onClick={() => navigate("/login")}
-            >
-              Log In
-            </Button>
-          )}
+          {token && (
+  <Button variant="danger" onClick={handleLogout}>
+    Log Out
+  </Button>
+)}
+
+{!token && location.pathname === "/register" && (
+  <Button
+    variant="primary"
+    onClick={() => navigate("/login")}
+  >
+    Log In
+  </Button>
+)}
         </div>
       </div>
     </nav>

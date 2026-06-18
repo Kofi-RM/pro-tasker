@@ -6,7 +6,7 @@ import type { ProjectType } from "../type/Project";
 
 type ProjectInfoProps = {
   project: ProjectType;
-  token: string;
+  token: string | null;
   onProjectUpdated: (project: ProjectType) => void;
   showMessage: (message: string) => void;
 };

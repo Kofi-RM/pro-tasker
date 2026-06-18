@@ -1,9 +1,12 @@
 
 // Registration page for creating a new account and storing the JWT.
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Button from "../components/Button";
 import axios from "axios";
+import { useAuth } from "../auth/useAuth";
+import { useNavigate } from "react-router-dom";
+import isTokenExpired from "../auth/tokenCheck";
 const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -12,7 +15,20 @@ const Register = () => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+const {token, logout} = useAuth()
+const navigate = useNavigate()
 
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+  
+    if (isTokenExpired(token)) {
+      logout();
+    }
+  }, [token, logout, navigate]);
+  
   const handleSubmit = async (
     e: React.FormEvent
   ) => {

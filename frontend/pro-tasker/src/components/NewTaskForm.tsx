@@ -7,7 +7,7 @@ import type { TaskType } from "../type/Task";
 
 type NewTaskFormProps = {
   projectId: string;
-  token: string;
+  token: string | null;
   onTaskCreated: (task: TaskType) => void;
   showMessage: (message: string) => void;
 };

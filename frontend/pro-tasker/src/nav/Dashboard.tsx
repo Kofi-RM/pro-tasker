@@ -8,6 +8,7 @@ import Button from "../components/Button";
 import ProjectList from "../components/ProjectList";
 import { useViewMode } from "../context/ViewMode";
 import { useNavigate } from "react-router-dom";
+import isTokenExpired from "../auth/tokenCheck";
 function Dashboard() {
   const [projects, setProjects] = useState<ProjectType[]>([]);
   const { token } = useAuth();
@@ -15,16 +16,17 @@ function Dashboard() {
   const [showNewProject, setShowNewProject] = useState(false);
   const [newTitle, setNewTitle] = useState("");
   const [newDescription, setNewDescription] = useState("");
-
+const {logout} = useAuth()
 const navigate = useNavigate()
 
 const { viewMode, setViewMode } = useViewMode()
 
   // Load projects for the authenticated user.
   useEffect(() => {
-    if (!token) {
+    if (!token || isTokenExpired(token)) {
+logout()
       console.log("no token")
-     navigate("/") 
+     navigate("/login") 
       return;
     }
     const getProjects = async () => {
@@ -45,7 +47,7 @@ const { viewMode, setViewMode } = useViewMode()
     };
 
     getProjects();
-  }, [token, navigate]);
+  }, [token, navigate, logout]);
 
 
   // useEffect( () => {
