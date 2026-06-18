@@ -1,6 +1,6 @@
 // Sidebar panel for viewing and editing project metadata.
 import { useState } from "react";
-import axios from "axios";
+import api from "../api/axios";
 import Button from "./Button";
 import type { ProjectType } from "../type/Project";
 
@@ -39,8 +39,8 @@ function ProjectInfoTile({
   }
 
   try {
-    const res = await axios.put(
-      `${import.meta.env.VITE_API_URL}/api/projects/${project._id}`,
+    const res = await api.put(
+      `/api/projects/${project._id}`,
       {
         title: trimmedTitle,
         description: trimmedDescription,

@@ -1,15 +1,22 @@
 // Project detail page. Shows project metadata, task list, and task management actions.
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../api/axios";
 
 import Modal from "../components/Modal";
 import { useAuth } from "../auth/useAuth";
 import { useTasks } from "../hooks/useTasks";
-
+import type { DragEndEvent } from "@dnd-kit/core";
+import {
+  DndContext,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import KanbanColumn from "../kanban/KanbanColumn";
 import ProjectInfoTile from "../components/ProjectInfoTile";
 import NewTaskForm from "../components/NewTaskForm";
-import TaskList from "../components/TaskList";
+
 import TaskModal from "../components/TaskModal";
 import Banner from "../components/Banner";
 import Button from "../components/Button";
@@ -18,6 +25,10 @@ import { useViewMode } from "../context/ViewMode";
 
 import type { TaskType } from "../type/Task";
 import isTokenExpired from "../auth/tokenCheck";
+
+
+
+// start projectPage
 function ProjectPage() {
 const { token,logout } = useAuth();
     let {  projectId } = useParams();
@@ -36,7 +47,13 @@ const { token,logout } = useAuth();
 
 const { viewMode, setViewMode } = useViewMode()
 
-
+const sensors = useSensors(
+  useSensor(PointerSensor, {
+    activationConstraint: {
+      distance: 6, // 👈 prevents accidental / sticky drag
+    },
+  })
+);
 
   const showMessage = (
     text: string,
@@ -65,7 +82,7 @@ useEffect(() => {
   );
 
 const todoTasks = tasks.filter(
-  (t) => t.status === "todo"
+  (t) => t.status === "to do"
 );
 
 const inProgressTasks = tasks.filter(
@@ -77,7 +94,51 @@ const completeTasks = tasks.filter(
 );
 
 
+const handleDragEnd = async (
+  event: DragEndEvent
+) => {
+  const { active, over } = event;
 
+  if (!over) return;
+
+  const taskId = active.id as string;
+  const newStatus = over.id as string;
+
+  const task = tasks.find(
+    (t) => t._id === taskId
+  );
+
+  if (!task) return;
+
+  if (task.status === newStatus) return;
+
+  try {
+    const res = await api.put(
+      `/api/projects/${projectId}/tasks/${taskId}`,
+      {
+        title: task.title,
+        description: task.description,
+        status: newStatus,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    setTasks((current) =>
+      current.map((t) =>
+        t._id === taskId ? res.data : t
+      )
+    );
+
+    showMessage("Task moved");
+  } catch (err) {
+    console.error(err);
+    showMessage("Failed to move task", "error");
+  }
+};
 
 
   // UPDATE TASK: only call the API if task data actually changed.
@@ -103,8 +164,8 @@ const completeTasks = tasks.filter(
     }
 
     // only call API if something changed
-    const res = await axios.put(
-      `${import.meta.env.VITE_API_URL}/api/projects/${projectId}/tasks/${id}`,
+    const res = await api.put(
+      `/api/projects/${projectId}/tasks/${id}`,
       data,
       {
         headers: {
@@ -129,7 +190,7 @@ const completeTasks = tasks.filter(
   // DELETE PROJECT: remove the project and navigate back to dashboard.
   const deleteProject = async () => {
     try {
-      await axios.delete(
+      await api.delete(
         `${import.meta.env.VITE_API_URL}/api/projects/${projectId}`,
         {
           headers: {
@@ -213,16 +274,36 @@ const completeTasks = tasks.filter(
        {tasks.length === 0 ? (
   <p className="text-slate-400">No tasks yet.</p>
 ) : viewMode === "tiles" ? (
+  <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+    <div className="grid md:grid-cols-3 gap-6">
 
-  <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-2">
-    <TaskList
-      tasks={tasks}
-      onTaskClick={(task) => setSelectedTask(task)}
-      onDelete={deleteTask}
-    />
-  </div>
+      <KanbanColumn
+        title="To Do"
+        status="to do"
+        tasks={todoTasks}
+        onTaskClick={setSelectedTask}
+        onTaskDelete={deleteTask}
+      />
 
-) : (
+      <KanbanColumn
+        title="In Progress"
+        status="in progress"
+        tasks={inProgressTasks}
+        onTaskClick={setSelectedTask}
+        onTaskDelete={deleteTask}
+      />
+
+      <KanbanColumn
+        title="Complete"
+        status="complete"
+        tasks={completeTasks}
+        onTaskClick={setSelectedTask}
+        onTaskDelete={deleteTask}
+      />
+
+    </div>
+  </DndContext>
+)  : (
 
   <div className="flex flex-col gap-2">
 
@@ -283,7 +364,7 @@ const completeTasks = tasks.filter(
     onTaskCreated={(task) => {
       createTask(task);
       setShowNewTask(false);
-      showMessage("Task created");
+      
     }}
   />
 </Modal>

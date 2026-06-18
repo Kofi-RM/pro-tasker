@@ -1,6 +1,6 @@
 // Form used inside the project page modal to create a new task.
 import { useState } from "react";
-import axios from "axios";
+import api from "../api/axios";
 import Button from "./Button";
 
 import type { TaskType } from "../type/Task";
@@ -26,8 +26,8 @@ function NewTaskForm({
     if (!title.trim()) return;
 console.log(projectId)
     try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/projects/${projectId}/tasks`,
+      const res = await api.post(
+        `/api/projects/${projectId}/tasks`,
         {
           title,
           description,

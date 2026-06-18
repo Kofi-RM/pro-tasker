@@ -2,6 +2,7 @@
 // Login page for username/password sign in and GitHub OAuth.
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import api from "../api/axios";
 import axios from "axios";
 import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
@@ -22,8 +23,8 @@ const {token, login} = useAuth()
     setError("");
 
     try {
-      const { data } = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/users/login`,
+      const { data } = await api.post(
+        `/api/users/login`,
         {
           email,
           password,

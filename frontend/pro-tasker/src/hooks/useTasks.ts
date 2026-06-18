@@ -1,6 +1,6 @@
 // Custom hook that loads and mutates tasks for a specific project.
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api/axios";
 import type { TaskType } from "../type/Task";
 
 export function useTasks(projectId: string, token: string | null  ) {
@@ -15,8 +15,8 @@ export function useTasks(projectId: string, token: string | null  ) {
       try {
         setLoading(true);
 
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/projects/${projectId}/tasks`,
+        const res = await api.get(
+          `/api/projects/${projectId}/tasks`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -39,8 +39,8 @@ export function useTasks(projectId: string, token: string | null  ) {
     description: string;
     status:string
   }) => {
-    const res = await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/projects/${projectId}/tasks`,
+    const res = await api.post(
+      `/api/projects/${projectId}/tasks`,
       data,
       {
         headers: {
@@ -54,8 +54,8 @@ export function useTasks(projectId: string, token: string | null  ) {
 
   // DELETE TASK
   const deleteTask = async (taskId: string) => {
-    await axios.delete(
-      `${import.meta.env.VITE_API_URL}/api/projects/${projectId}/tasks/${taskId}`,
+    await api.delete(
+      `/api/projects/${projectId}/tasks/${taskId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

@@ -1,6 +1,6 @@
 // Dashboard page shows the user's projects and supports tile/list view.
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api/axios";
 import { useAuth } from "../auth/useAuth";
 import type { ProjectType } from "../type/Project";
 import Project from "../components/Project";
@@ -31,8 +31,8 @@ logout()
     }
     const getProjects = async () => {
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/projects`,
+        const res = await api.get(
+          `/api/projects`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -56,8 +56,8 @@ logout()
   // POST a new project to the API and update local state.
   const createProject = async () => {
     try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/projects`,
+      const res = await api.post(
+        `/api/projects`,
         {
           title: newTitle,
           description: newDescription,

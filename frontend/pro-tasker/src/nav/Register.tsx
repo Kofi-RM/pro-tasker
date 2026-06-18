@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Button from "../components/Button";
+import api from "../api/axios";
 import axios from "axios";
 import { useAuth } from "../auth/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -39,7 +40,7 @@ const navigate = useNavigate()
       setError("");
 
       // registration logic here
-      const {data} = await axios.post( `${import.meta.env.VITE_API_URL}/api/users/register`,
+      const {data} = await api.post( `/api/users/register`,
         {
             username,
           email,

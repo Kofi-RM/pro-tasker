@@ -199,7 +199,7 @@ Tasks (mounted at `/api/projects/:projectId` via `projectRoutes`)
 2. POST /api/projects/:projectId/tasks
 - Description: Create a new task for the given project.
 - Auth: yes
-- Body: `{ title, description?, status? }` (status defaults to `not complete`)
+- Body: `{ title, description?, status? }` (status defaults to `to do`)
 - Response: 201 JSON of created task
 
 3. DELETE /api/projects/:projectId/tasks/:taskId

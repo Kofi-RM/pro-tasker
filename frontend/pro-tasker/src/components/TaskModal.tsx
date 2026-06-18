@@ -60,7 +60,7 @@ function TaskModal({ task, onClose, onSave }: TaskModalProps) {
           value={status}
           onChange={(e) => setStatus(e.target.value)}
         >
-          <option value="not complete">Not Complete</option>
+          <option value="to do">To do</option>
           <option value="in progress">In Progress</option>
           <option value="complete">Complete</option>
         </select>

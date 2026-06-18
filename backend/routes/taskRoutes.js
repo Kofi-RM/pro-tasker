@@ -30,7 +30,7 @@ router.post('/tasks',authMiddleware, async (req, res) => {
       const task = await Task.create({
         title: req.body.title,
         description: req.body.description || "",
-        status: req.body.status || "not complete",
+        status: req.body.status || "to do",
         project: req.params.projectId,
         user: req.user._id,
       });

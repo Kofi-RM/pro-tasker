@@ -20,7 +20,7 @@ function Task({ task, onClick, onDelete}: TaskProps) {
     case "in progress":
       return "bg-yellow-500/10 text-yellow-300 border-yellow-500/30";
 
-    case "not complete":
+    case "to do":
       return "bg-red-500/10 text-red-400 border-red-500/30";
 
     default:
