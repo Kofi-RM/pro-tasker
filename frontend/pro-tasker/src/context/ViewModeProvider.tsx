@@ -12,14 +12,14 @@ export function ViewModeProvider({
 }) {
   const [viewMode, setViewMode] = useState<ViewMode>(() => {
     return (
-      (localStorage.getItem("viewMode") as ViewMode) ||
+      (localStorage.getItem("protasker_viewMode") as ViewMode) ||
       "tiles"
     );
   });
 
   const updateViewMode = (mode: ViewMode) => {
     setViewMode(mode);
-    localStorage.setItem("viewMode", mode);
+    localStorage.setItem("protasker_viewMode", mode);
   };
 
   return (

@@ -18,6 +18,17 @@ router.get("/", async (req,res) => {
   }
 })
 
+router.get("/:userId", async (req,res) => {
+  try {
+    const users = await User.findById(req.params.userId)
+    res.json(users);
+  } catch (err) {
+ res.status(400).json({
+  error: err.message
+})
+  }
+})
+
 // POST /api/users/register - create a new account and return a JWT
 router.post('/register', async (req, res) => {
   const { email } = req.body;

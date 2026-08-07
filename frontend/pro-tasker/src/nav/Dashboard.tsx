@@ -23,6 +23,8 @@ const { viewMode, setViewMode } = useViewMode()
 
   // Load projects for the authenticated user.
   useEffect(() => {
+    if(token) console.log(token)
+    if(token) console.log(isTokenExpired(token))
     if (!token || isTokenExpired(token)) {
 logout()
       console.log("no token")

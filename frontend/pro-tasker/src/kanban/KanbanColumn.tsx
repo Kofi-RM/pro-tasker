@@ -1,5 +1,6 @@
 import type { TaskType } from "../type/Task";
 import { useDroppable } from "@dnd-kit/core";
+
 import { AnimatePresence, motion } from "framer-motion";
 import DraggableTask from "./DraggableTask";
 function KanbanColumn({
@@ -37,7 +38,7 @@ function KanbanColumn({
       {tasks.map((task) => (
         <motion.div
       key={task._id}
-      layout
+      
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}

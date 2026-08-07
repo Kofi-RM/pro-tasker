@@ -48,7 +48,7 @@ const navigate = useNavigate()
         })
 
      console.log(data)
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("protasker_token", data.token);
          window.location.href = "/dashboard";
 
     } catch (err:unknown) {

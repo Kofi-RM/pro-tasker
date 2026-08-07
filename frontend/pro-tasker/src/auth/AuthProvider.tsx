@@ -6,17 +6,17 @@ import type { ReactNode } from "react";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string | null>(
-    localStorage.getItem("token")
+    localStorage.getItem("protasker_token")
   );
 
   const login = (newToken: string) => {
     setToken(newToken);
-    localStorage.setItem("token", newToken);
+    localStorage.setItem("protasker_token", newToken);
   };
 
 const logout = useCallback(() => {
   setToken(null);
-  localStorage.removeItem("token");
+  localStorage.removeItem("protasker_token");
 }, []);
 
   useEffect(() => {
