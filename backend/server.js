@@ -19,7 +19,8 @@ app.use(express.json());
 // Whitelist trusted frontend hosts for browser-based CORS requests.
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://pro-tasker-1.onrender.com"
+  "https://pro-tasker-1.onrender.com",
+  "https://pro-tasker-docker-frontend.onrender.com"
 ];
 
 app.use(cors({
