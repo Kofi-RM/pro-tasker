@@ -1,62 +1,32 @@
 // Form used inside the project page modal to create a new task.
 import { useState } from "react";
-import api from "../api/axios";
 import Button from "./Button";
-
-import type { TaskType } from "../type/Task";
+import type { TaskInput, TaskStatus } from "../type/Task";
 
 type NewTaskFormProps = {
-  projectId: string;
-  token: string | null;
-  onTaskCreated: (task: TaskType) => void;
-  showMessage: (message: string) => void;
+  onSubmit: (task: TaskInput) => Promise<void>;
 };
 
 function NewTaskForm({
-  projectId,
-  token,
-  onTaskCreated,
-  showMessage,
+  onSubmit,
 }: NewTaskFormProps) {
   const [title, setTitle] = useState("");
-  const [description, setDescription] =
-    useState("");
+  const [description, setDescription] = useState("");
+  const [status, setStatus] = useState<TaskStatus>("to do");
+  const [saving, setSaving] = useState(false);
 
   const createTask = async () => {
     if (!title.trim()) return;
-console.log(projectId)
+    setSaving(true);
     try {
-      const res = await api.post(
-        `/api/projects/${projectId}/tasks`,
-        {
-          title,
-          description,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      onTaskCreated(res.data);
-
-      setTitle("");
-      setDescription("");
-
-      showMessage("Task created");
-    } catch (err) {
-      console.error(err);
-      showMessage("Failed to create task");
+      await onSubmit({ title: title.trim(), description: description.trim(), status });
+    } finally {
+      setSaving(false);
     }
   };
 
   return (
-    <div className="bg-slate-900/70 border border-slate-800 rounded-3xl p-6 mt-8">
-      <h2 className="text-2xl font-bold text-slate-50 mb-4">
-        New Task
-      </h2>
-
+    <form className="space-y-4" onSubmit={(event) => { event.preventDefault(); void createTask(); }}>
       <div className="space-y-3">
         <input
           value={title}
@@ -90,14 +60,26 @@ console.log(projectId)
           "
         />
 
+        <select
+          value={status}
+          onChange={(event) => setStatus(event.target.value as TaskStatus)}
+          className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-slate-100"
+          aria-label="Initial task status"
+        >
+          <option value="to do">To do</option>
+          <option value="in progress">In progress</option>
+          <option value="complete">Complete</option>
+        </select>
+
         <Button
           variant="success"
-          onClick={createTask}
+          type="submit"
+          disabled={saving || !title.trim()}
         >
-          Create Task
+          {saving ? "Creating…" : "Create Task"}
         </Button>
       </div>
-    </div>
+    </form>
   );
 }
 

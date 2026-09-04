@@ -2,6 +2,7 @@
 // All project routes are protected and require a valid JWT.
 const router = require('express').Router();
 const  Project  = require('../models/Project');
+const Task = require('../models/Task');
 const taskRoutes = require("./taskRoutes")
 const {authMiddleware} = require("../util/auth")
 
@@ -11,7 +12,6 @@ try {
     const projects = await Project.find({
         user: req.user._id
     })
-    console.log(projects)
      res.json(projects);
   } catch (err) {
  res.status(400).json({
@@ -71,7 +71,7 @@ const project = await Project.findById(req.params.projectId)
     }
 
      project.title = req.body.title || project.title;
-    project.description = req.body.description || project.url;
+    project.description = req.body.description ?? project.description;
 
         const updatedProject = await project.save();
 
@@ -96,6 +96,7 @@ router.delete('/:projectId', authMiddleware, async (req, res) => {
     }
 
     await Project.findByIdAndDelete(req.params.projectId);
+    await Task.deleteMany({ project: req.params.projectId, user: req.user._id });
 
     res.json({
       message: 'Project deleted successfully'

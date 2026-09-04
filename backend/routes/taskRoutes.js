@@ -14,7 +14,7 @@ try {
     const tasks = await Task.find({
         user: req.user._id,
         project: projectId
-    })
+    }).sort({ createdAt: 1 })
      res.json(tasks);
   } catch (err) {
  res.status(400).json({
@@ -25,7 +25,6 @@ try {
 
 router.post('/tasks',authMiddleware, async (req, res) => {
 
-  console.log(req.params.projectId)
      try {
       const task = await Task.create({
         title: req.body.title,
@@ -43,18 +42,21 @@ router.post('/tasks',authMiddleware, async (req, res) => {
 });
 
 router.delete("/tasks/:taskId", authMiddleware, async (req,res) => {
-  const { taskId } = req.params;
+  try {
+    const task = await Task.findOneAndDelete({
+      _id: req.params.taskId,
+      project: req.params.projectId,
+      user: req.user._id,
+    });
 
-  const task = await Task.findById(taskId);
-
-  // Only the owner of the task can delete it.
-  if (task.user.toString() !== req.user._id) {
-      return res.status(403).json({ message: "Unauthorized" });
+    if (!task) {
+      return res.status(404).json({ message: "Task not found" });
     }
 
-  Task.findByIdAndDelete(taskId)
-   .then(task => res.json(task))
-    .catch(err => res.status(500).json(err));
+    return res.json(task);
+  } catch (err) {
+    return res.status(400).json({ message: err.message });
+  }
 })
  
 
@@ -63,18 +65,17 @@ router.put("/tasks/:taskId", authMiddleware, async (req, res) => {
   try {
     const { taskId } = req.params;
 
-    const task = await Task.findById(taskId);
+    const task = await Task.findOne({
+      _id: taskId,
+      project: req.params.projectId,
+      user: req.user._id,
+    });
 
     if (!task) {
       return res.status(404).json({ message: "Task not found" });
     }
 
-    // 🔒 ownership check (important)
-    if (task.user.toString() !== req.user._id) {
-      return res.status(403).json({ message: "Unauthorized ffsdfasd" });
-    }
-
-    // ✏️ update fields
+    // Only allow the editable task fields through.
     task.title = req.body.title ?? task.title;
    task.description = req.body.description ?? task.description;
    task.status = req.body.status ?? task.status;

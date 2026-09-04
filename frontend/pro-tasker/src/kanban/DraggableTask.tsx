@@ -8,7 +8,7 @@ function DraggableTask({ task, onClick, onDelete }: {
   onDelete: () => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
-    useDraggable({ id: task._id });
+    useDraggable({ id: task._id, data: { task, status: task.status } });
 
   const style = transform
   ? {
@@ -57,6 +57,7 @@ function DraggableTask({ task, onClick, onDelete }: {
             text-slate-500 hover:text-slate-200
             border-r border-slate-800
           "
+          aria-label={`Move ${task.title}`}
         >
           ⋮⋮
         </div>
@@ -69,6 +70,7 @@ function DraggableTask({ task, onClick, onDelete }: {
             <button
               onClick={(e) => { e.stopPropagation(); onDelete(); }}
               className="text-xs text-slate-500 hover:text-red-400 transition"
+              aria-label={`Delete ${task.title}`}
             >
               ✕
             </button>

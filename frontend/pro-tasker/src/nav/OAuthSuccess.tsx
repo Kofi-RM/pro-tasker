@@ -19,7 +19,7 @@ function OAuthSuccess() {
     } else {
       navigate("/login");
     }
-  }, []);
+  }, [login, navigate]);
 
   return <h1>Signing you in...</h1>;
 }

@@ -23,12 +23,13 @@ const { viewMode, setViewMode } = useViewMode()
 
   // Load projects for the authenticated user.
   useEffect(() => {
-    if(token) console.log(token)
-    if(token) console.log(isTokenExpired(token))
-    if (!token || isTokenExpired(token)) {
-logout()
-      console.log("no token")
-     navigate("/login") 
+    if (!token) {
+      navigate("/login", { replace: true });
+      return;
+    }
+    if (isTokenExpired(token)) {
+      logout();
+      navigate("/login", { replace: true });
       return;
     }
     const getProjects = async () => {
@@ -70,8 +71,6 @@ logout()
           },
         }
       );
-
-      console.log("CREATE PROJECT RESPONSE:", res.data);
 
       setProjects((prev) => [res.data.project, ...prev]);
       setNewTitle("");

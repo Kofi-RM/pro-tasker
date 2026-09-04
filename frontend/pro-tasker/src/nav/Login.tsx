@@ -7,6 +7,7 @@ import axios from "axios";
 import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/useAuth";
+import isTokenExpired from "../auth/tokenCheck";
 function Login() {
   
   const [email, setEmail] = useState<string>("");
@@ -45,7 +46,7 @@ const {token, login} = useAuth()
   };
 
  useEffect(() => {
-  if (token) navigate("/dashboard");
+  if (token && !isTokenExpired(token)) navigate("/dashboard", { replace: true });
   
 }, [token, navigate]);
   return (

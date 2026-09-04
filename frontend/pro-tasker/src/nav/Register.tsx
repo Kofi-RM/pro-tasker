@@ -16,19 +16,12 @@ const Register = () => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-const {token, logout} = useAuth()
+const {token, login} = useAuth()
 const navigate = useNavigate()
 
   useEffect(() => {
-    if (!token) {
-      navigate("/login");
-      return;
-    }
-  
-    if (isTokenExpired(token)) {
-      logout();
-    }
-  }, [token, logout, navigate]);
+    if (token && !isTokenExpired(token)) navigate("/dashboard", { replace: true });
+  }, [token, navigate]);
   
   const handleSubmit = async (
     e: React.FormEvent
@@ -47,15 +40,15 @@ const navigate = useNavigate()
           password,
         })
 
-     console.log(data)
-      localStorage.setItem("protasker_token", data.token);
-         window.location.href = "/dashboard";
+      login(data.token);
+      navigate("/dashboard", { replace: true });
 
     } catch (err:unknown) {
-         if (axios.isAxiosError(err)) {
-    setError(err.response?.data?.message || "Login failed");
-  }
-      setError("Failed to create account");
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.message || "Failed to create account");
+      } else {
+        setError("Failed to create account");
+      }
     } finally {
       setLoading(false);
     }
